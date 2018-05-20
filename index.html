@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset=utf-8>
+    <title>Crypto Lock</title>
+    <script src=nebPay.js></script>
+    <link rel=stylesheet href=css/ui-block.css>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+</head>
+<body>
+    <!-- All of these scripts are dependancies from the Nebulas Web Wallet -->
+    <script src=lib/jquery-3.3.1.min.js></script>
+    
+    <!-- Front end logic for our Dapp -->
+    <script>
+        "use strict";
+
+        // Global variables used by our Dapp
+        var contract_address = "n22ehAhGwGZEsLULAbjNzApLPFoCXqgRcFV";
+
+        var NebPay = require("nebpay");
+        var nebPay = new NebPay();
+        //to check if the extension is installed
+        //if the extension is installed, var "webExtensionWallet" will be injected in to web page
+        if(typeof(webExtensionWallet) === "undefined"){
+            alert ("Extension wallet is not installed, please install it first.")
+        }
+
+        // Called by the Refresh button
+        function onClickRefresh() {
+            nebPay.simulateCall(contract_address, 0, "getPredictions", null, {
+                callback: NebPay.config.testnetUrl,
+                listener: onGetPrediction
+            });       
+        }
+
+
+        function onGetPrediction(resp) {
+            $("#prediction_history").empty();
+
+            var predictions = JSON.parse(resp.result);
+            
+            for(var i = 0; i < predictions.length; i++) {
+                var $span = $("<span></span>").text(predictions[i]);
+                $("#prediction_history").append($span);
+                $("#prediction_history").append("<br><br>");
+            }
+        }
+   </script>
+</body>
+</html>
