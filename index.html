@@ -5,6 +5,9 @@
     <title>Crypto Lock</title>
     <script src=nebPay.js></script>
     <link rel=stylesheet href=css/ui-block.css>
+
+     <!-- All of these scripts are dependancies from the Nebulas Web Wallet -->
+    <script src=lib/jquery-3.3.1.min.js></script>
     
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -17,8 +20,9 @@
 
 </head>
 <body>
-    <!-- All of these scripts are dependancies from the Nebulas Web Wallet -->
-    <script src=lib/jquery-3.3.1.min.js></script>
+    <div id="app"></div>
+
+    <script src = "index.js"></script>
     
     <!-- Front end logic for our Dapp -->
     <script>
@@ -31,9 +35,9 @@
         var nebPay = new NebPay();
         //to check if the extension is installed
         //if the extension is installed, var "webExtensionWallet" will be injected in to web page
-        if(typeof(webExtensionWallet) === "undefined"){
-            alert ("Extension wallet is not installed, please install it first.")
-        }
+        // if(typeof(webExtensionWallet) === "undefined"){
+        //     alert ("Extension wallet is not installed, please install it first.")
+        // }
 
         // Called by the Refresh button
         function onClickRefresh() {
