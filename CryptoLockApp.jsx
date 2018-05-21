@@ -11,15 +11,59 @@ class CryptoLockApp extends React.Component {
     };
     this.handleDateChange = this.handleDateChange.bind(this);
     this.handleAmountChange = this.handleAmountChange.bind(this);
+    this.onDeposit = this.onDeposit.bind(this);
+    this.onGetDeposit = this.onGetDeposit.bind(this);
+    this.onCheckBalance = this.onCheckBalance.bind(this);
+    this.checkBalance = this.checkBalance.bind(this);
+    this.onWithdraw = this.onWithdraw.bind(this);
+    this.onWithdrawSuccess = this.onWithdrawSuccess.bind(this);
   };
 
   handleAmountChange(input) {
-    this.setState({amount:input.target.value});
+    this.setState({amount:input.target.value});  
   };
 
   handleDateChange(input) {
     this.setState({date:input});
   };
+
+  onDeposit() {
+    nebPay.call(contract_address, this.state.amount, "save", "[928374938274234]", {
+                callback: NebPay.config.testnetUrl,
+                listener: this.onGetDeposit
+    });
+  };
+
+  onGetDeposit(resp) {
+    // Do something? Idk
+  }
+
+  onWithdraw() {
+    nebPay.call(contract_address, 0, "takeout", JSON.stringify([this.state.amount * 1000000000000000000]), {
+                callback: NebPay.config.testnetUrl,
+                listener: this.onWithdrawSuccess
+    });
+  }
+
+  onWithdrawSuccess(resp) {
+    // Do something
+  }
+
+  checkBalance() {
+    nebPay.simulateCall(contract_address, 0, "balanceOf", null, {
+      callback: NebPay.config.testnetUrl,
+      listener: this.onCheckBalance
+    })  
+  }
+
+  onCheckBalance(resp) {
+    var amount = Number(JSON.parse(resp.result).balance) / 1000000000000000000
+    var expirationDate = JSON.parse(resp.result).expiryHeight
+    alert("Amount in storage: " + JSON.stringify(amount));
+    alert("Expiration date: " + JSON.stringify(expirationDate));
+  }
+
+
 
   render() {
 		return (
@@ -50,9 +94,9 @@ class CryptoLockApp extends React.Component {
               </div>
   
               <div className="button-group align-center">
-                <button type="button" className="button">Save</button>
-                <button type="button" className="button">Check Balance</button>
-                <button type="button" className="success button">Save</button>
+                <button type="button" className="button" onClick={this.onDeposit}>Deposit</button>
+                <button type="button" className="button" onClick={this.checkBalance}>Check Balance</button>
+                <button type="button" className="success button" onClick={this.onWithdraw}>Withdraw</button>
               </div>
 	        	</form>
         	</div>
