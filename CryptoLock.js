@@ -2,10 +2,10 @@ var LockedDeposit = function (text) {
   if (text) {
     var o = JSON.parse(text);
     this.balance = new BigNumber(o.balance);
-    this.expiryHeight = new BigNumber(o.expiryHeight);
+    this.expirationDate = new BigNumber(o.expirationDate);
   } else {
     this.balance = new BigNumber(0);
-    this.expiryHeight = new BigNumber(0);
+    this.expirationDate = new BigNumber(0);
   }
 };
 
@@ -46,7 +46,7 @@ CryptoLockContract.prototype = {
     // Create the deposit object
     var deposit = new LockedDeposit();
     deposit.balance = value;
-    deposit.expiryHeight = exp_date;
+    deposit.expirationDate = exp_date;
 
     // Post their deposit object to the chain
     this.bankVault.put(from, deposit);
@@ -61,8 +61,8 @@ CryptoLockContract.prototype = {
       throw new Error("No deposit before.");
     }
 
-    if (deposit.expiryHeight < Date.now()) {
-        throw new Error("Can not takeout before expiryHeight.");
+    if (deposit.expirationDate < Date.now()) {
+        throw new Error("Can not takeout before expirationDate.");
     }
 
     if (amount.gt(deposit.balance)) {
