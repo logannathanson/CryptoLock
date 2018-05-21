@@ -3,21 +3,16 @@ import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
 class CryptoLockApp extends React.Component {
-	constructor(props) {
-    super(props);
-  	this.state = {
-      date: moment(),
-      amount: 0
-    };
-    this.handleDateChange = this.handleDateChange.bind(this);
-    this.handleAmountChange = this.handleAmountChange.bind(this);
+  state = {
+    date: moment(),
+    amount: 0
   };
 
-  handleAmountChange(input) {
+  handleAmountChange = (input)  => {
     this.setState({amount:input.target.value});
   };
 
-  handleDateChange(input) {
+  handleDateChange = (input) => {
     this.setState({date:input});
   };
 
